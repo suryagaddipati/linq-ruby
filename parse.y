@@ -644,6 +644,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 	keyword_while
 	keyword_until
 	keyword_for
+	keyword_from
 	keyword_break
 	keyword_next
 	keyword_redo
@@ -1890,7 +1891,7 @@ reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_break | keyword_case | keyword_class | keyword_def
 		| keyword_defined | keyword_do | keyword_else | keyword_elsif
 		| keyword_end | keyword_ensure | keyword_false
-		| keyword_for | keyword_in | keyword_module | keyword_next
+		| keyword_for| keyword_from | keyword_in | keyword_module | keyword_next
 		| keyword_nil | keyword_not | keyword_or | keyword_redo
 		| keyword_rescue | keyword_retry | keyword_return | keyword_self
 		| keyword_super | keyword_then | keyword_true | keyword_undef
@@ -3116,6 +3117,11 @@ k_case		: keyword_case
 		    }
 		;
 
+k_from		: keyword_from
+		    {
+			token_info_push("from");
+		    }
+    ;
 k_for		: keyword_for
 		    {
 			token_info_push("for");
