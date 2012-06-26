@@ -31,30 +31,30 @@ class RDoc::Markup::ToHtml < RDoc::Markup::Formatter
   ##
   # Path to this document for relative links
 
-  attr_accessor :from_path
+  attr_accessor :from_replaced_path
 
   ##
   # Converts a target url to one that is relative to a given path
 
   def self.gen_relative_url(path, target)
-    from        = File.dirname path
+    from_replaced        = File.dirname path
     to, to_file = File.split target
 
-    from = from.split "/"
+    from_replaced = from_replaced.split "/"
     to   = to.split "/"
 
-    from.delete '.'
+    from_replaced.delete '.'
     to.delete '.'
 
-    while from.size > 0 and to.size > 0 and from[0] == to[0] do
-      from.shift
+    while from_replaced.size > 0 and to.size > 0 and from_replaced[0] == to[0] do
+      from_replaced.shift
       to.shift
     end
 
-    from.fill ".."
-    from.concat to
-    from << to_file
-    File.join(*from)
+    from_replaced.fill ".."
+    from_replaced.concat to
+    from_replaced << to_file
+    File.join(*from_replaced)
   end
 
   # :section:
@@ -68,7 +68,7 @@ class RDoc::Markup::ToHtml < RDoc::Markup::Formatter
     @th = nil
     @in_list_entry = nil
     @list = nil
-    @from_path = ''
+    @from_replaced_path = ''
 
     # external links
     @markup.add_special(/((link:|https?:|mailto:|ftp:|www\.)\S+\w)/, :HYPERLINK)
@@ -102,7 +102,7 @@ class RDoc::Markup::ToHtml < RDoc::Markup::Formatter
   end
 
   ##
-  # This +special+ is a link where the label is different from the URL
+  # This +special+ is a link where the label is different from_replaced the URL
   # <tt>label[url]</tt> or <tt>{long label}[url]</tt>
 
   def handle_special_TIDYLINK(special)
@@ -250,7 +250,7 @@ class RDoc::Markup::ToHtml < RDoc::Markup::Formatter
       url = if path[0, 1] == '#' then # is this meaningful?
               path
             else
-              self.class.gen_relative_url @from_path, path
+              self.class.gen_relative_url @from_replaced_path, path
             end
     end
 
@@ -281,7 +281,7 @@ class RDoc::Markup::ToHtml < RDoc::Markup::Formatter
   end
 
   ##
-  # Returns the HTML tag for +list_type+, possible using a label from
+  # Returns the HTML tag for +list_type+, possible using a label from_replaced
   # +list_item+
 
   def list_item_start(list_item, list_type)

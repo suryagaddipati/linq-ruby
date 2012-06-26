@@ -167,7 +167,7 @@ class RDoc::Context < RDoc::CodeObject
     end
 
     ##
-    # Extracts the comment for this section from the original comment block.
+    # Extracts the comment for this section from_replaced the original comment block.
     # If the first line contains :section:, strip it and use the rest.
     # Otherwise remove lines up to the line containing :section:, and look
     # for those lines again at the end and remove them. This lets us write
@@ -548,11 +548,11 @@ class RDoc::Context < RDoc::CodeObject
   end
 
   ##
-  # Adds an alias from +from+ (a class or module) to +name+ which was defined
+  # Adds an alias from_replaced +from_replaced+ (a class or module) to +name+ which was defined
   # in +file+.
 
-  def add_module_alias from, name, file
-    return from if @done_documenting
+  def add_module_alias from_replaced, name, file
+    return from_replaced if @done_documenting
 
     to_name = child_name(name)
 
@@ -560,14 +560,14 @@ class RDoc::Context < RDoc::CodeObject
     # see the metaprogramming in lib/active_support/basic_object.rb,
     # where we already know BasicObject as a class when we find
     # BasicObject = BlankSlate
-    return from if RDoc::TopLevel.find_class_or_module(to_name)
+    return from_replaced if RDoc::TopLevel.find_class_or_module(to_name)
 
-    if from.module? then
-      RDoc::TopLevel.modules_hash[to_name] = from
-      @modules[name] = from
+    if from_replaced.module? then
+      RDoc::TopLevel.modules_hash[to_name] = from_replaced
+      @modules[name] = from_replaced
     else
-      RDoc::TopLevel.classes_hash[to_name] = from
-      @classes[name] = from
+      RDoc::TopLevel.classes_hash[to_name] = from_replaced
+      @classes[name] = from_replaced
     end
 
     # HACK: register a constant for this alias:
@@ -575,10 +575,10 @@ class RDoc::Context < RDoc::CodeObject
     # when the Ruby parser adds the constant
     const = RDoc::Constant.new name, nil, ''
     const.record_location file
-    const.is_alias_for = from
+    const.is_alias_for = from_replaced
     add_constant const
 
-    from
+    from_replaced
   end
 
   ##
@@ -970,7 +970,7 @@ class RDoc::Context < RDoc::CodeObject
 
   def http_url(prefix)
     path = name_for_path
-    path = path.gsub(/<<\s*(\w*)/, 'from-\1') if path =~ /<</
+    path = path.gsub(/<<\s*(\w*)/, 'from_replaced-\1') if path =~ /<</
     path = [prefix] + path.split('::')
 
     File.join(*path.compact) + '.html'
@@ -1067,21 +1067,21 @@ class RDoc::Context < RDoc::CodeObject
   end
 
   ##
-  # Should we remove this context from the documentation?
+  # Should we remove this context from_replaced the documentation?
   #
   # The answer is yes if:
   # * #received_nodoc is +true+
   # * #any_content is +false+ (not counting includes)
   # * All #includes are modules (not a string), and their module has
-  #   <tt>#remove_from_documentation? == true</tt>
-  # * All classes and modules have <tt>#remove_from_documentation? == true</tt>
+  #   <tt>#remove_from_replaced_documentation? == true</tt>
+  # * All classes and modules have <tt>#remove_from_replaced_documentation? == true</tt>
 
-  def remove_from_documentation?
-    @remove_from_documentation ||=
+  def remove_from_replaced_documentation?
+    @remove_from_replaced_documentation ||=
       @received_nodoc &&
       !any_content(false) &&
-      @includes.all? { |i| !i.module.is_a?(String) && i.module.remove_from_documentation? } &&
-      classes_and_modules.all? { |cm| cm.remove_from_documentation? }
+      @includes.all? { |i| !i.module.is_a?(String) && i.module.remove_from_replaced_documentation? } &&
+      classes_and_modules.all? { |cm| cm.remove_from_replaced_documentation? }
   end
 
   ##
@@ -1178,7 +1178,7 @@ class RDoc::Context < RDoc::CodeObject
   def upgrade_to_class mod, class_type, enclosing
     enclosing.modules_hash.delete mod.name
 
-    klass = RDoc::ClassModule.from_module class_type, mod
+    klass = RDoc::ClassModule.from_replaced_module class_type, mod
 
     # if it was there, then we keep it even if done_documenting
     RDoc::TopLevel.classes_hash[mod.full_name] = klass

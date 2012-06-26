@@ -94,15 +94,15 @@ class RDoc::TopLevel < RDoc::Context
   # classes or modules.
   #
   # It also completely removes the classes and modules that should be removed
-  # from the documentation and the methods that have a visibility below
+  # from_replaced the documentation and the methods that have a visibility below
   # +min_visibility+, which is the <tt>--visibility</tt> option.
   #
-  # See also RDoc::Context#remove_from_documentation?
+  # See also RDoc::Context#remove_from_replaced_documentation?
 
   def self.complete min_visibility
     fix_basic_object_inheritance
 
-    # cache included modules before they are removed from the documentation
+    # cache included modules before they are removed from_replaced the documentation
     all_classes_and_modules.each { |cm| cm.ancestors }
 
     remove_nodoc @all_classes_hash
@@ -142,18 +142,18 @@ class RDoc::TopLevel < RDoc::Context
   end
 
   ##
-  # Finds the class with +name+ starting in namespace +from+
+  # Finds the class with +name+ starting in namespace +from_replaced+
 
-  def self.find_class_named_from name, from
-    from = find_class_named from unless RDoc::Context === from
+  def self.find_class_named_from_replaced name, from_replaced
+    from_replaced = find_class_named from_replaced unless RDoc::Context === from_replaced
 
-    until RDoc::TopLevel === from do
-      return nil unless from
+    until RDoc::TopLevel === from_replaced do
+      return nil unless from_replaced
 
-      klass = from.find_class_named name
+      klass = from_replaced.find_class_named name
       return klass if klass
 
-      from = from.parent
+      from_replaced = from_replaced.parent
     end
 
     find_class_named name
@@ -202,7 +202,7 @@ class RDoc::TopLevel < RDoc::Context
   # Fixes the erroneous <tt>BasicObject < Object</tt> in 1.9.
   #
   # Because we assumed all classes without a stated superclass
-  # inherit from Object, we have the above wrong inheritance.
+  # inherit from_replaced Object, we have the above wrong inheritance.
   #
   # We fix BasicObject right away if we are running in a Ruby
   # version >= 1.9. If not, we may be documenting 1.9 source
@@ -234,14 +234,14 @@ class RDoc::TopLevel < RDoc::Context
   end
 
   ##
-  # Removes from +all_hash+ the contexts that are nodoc or have no content.
+  # Removes from_replaced +all_hash+ the contexts that are nodoc or have no content.
   #
-  # See RDoc::Context#remove_from_documentation?
+  # See RDoc::Context#remove_from_replaced_documentation?
 
   def self.remove_nodoc(all_hash)
     all_hash.keys.each do |name|
       context = all_hash[name]
-      all_hash.delete(name) if context.remove_from_documentation?
+      all_hash.delete(name) if context.remove_from_replaced_documentation?
     end
   end
 

@@ -28,6 +28,7 @@ end, {keyword_end, keyword_end}, EXPR_END
 ensure, {keyword_ensure, keyword_ensure}, EXPR_BEG
 false, {keyword_false, keyword_false}, EXPR_END
 for, {keyword_for, keyword_for}, EXPR_VALUE
+from, {keyword_from, keyword_from}, EXPR_VALUE
 if, {keyword_if, modifier_if}, EXPR_VALUE
 in, {keyword_in, keyword_in}, EXPR_VALUE
 module, {keyword_module, keyword_module}, EXPR_VALUE

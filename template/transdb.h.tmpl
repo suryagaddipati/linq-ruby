@@ -54,6 +54,6 @@ transdirs.each do |transdir|
   end
 end
 converter_list.each do |from_to|
-  from, to, fn = *converters[from_to]
-%>rb_declare_transcoder("<%=from%>", "<%=to%>", "<%=fn%>");
+  from1, to, fn = *converters[from_to]
+%>rb_declare_transcoder("<%=from1%>", "<%=to%>", "<%=fn%>");
 % end
