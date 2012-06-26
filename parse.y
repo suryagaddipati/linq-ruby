@@ -2859,6 +2859,8 @@ primary		: literal
 			$$ = dispatch2(case, Qnil, $3);
 		    %*/
 		    }
+		| k_from for_var keyword_in
+     {printf("matched");}
 		| k_for for_var keyword_in
 		  {COND_PUSH(1);}
 		  expr_value do
