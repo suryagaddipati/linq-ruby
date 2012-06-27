@@ -3312,6 +3312,8 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	iseq->compile_data->ensure_node_stack = iseq->compile_data->ensure_node_stack->prev;
 	break;
       }
+      case NODE_FROM:
+                      break;
       case NODE_ITER:
       case NODE_FOR:{
 	VALUE prevblock = iseq->compile_data->current_block;
@@ -3819,8 +3821,6 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	 * eval y    # nil a x a[x] y
 	 * send op   # nil a x ret
 	 * setn 3    # ret a x ret
-	 * send []=  # ret ?
-	 * pop       # ret
 	 */
 
 	/*

@@ -165,6 +165,9 @@ dump_node(VALUE buf, VALUE indent, int comment, NODE *node)
 	ANN("format: [nd_iter] { [nd_body] }");
 	ANN("example: 3.times { foo }");
 	goto iter;
+      case NODE_FROM:
+	ANN("from statement");
+     break;
       case NODE_FOR:
 	ANN("for statement");
 	ANN("format: for * in [nd_iter] do [nd_body] end");

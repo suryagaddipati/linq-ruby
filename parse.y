@@ -2862,7 +2862,9 @@ primary		: literal
 		    %*/
 		    }
 		| k_from for_var keyword_in for_var k_select for_var
-     {printf("matched");}
+     {printf("matched");
+			$$ = NEW_FROM(0, 3, 6);
+     }
 		| k_for for_var keyword_in
 		  {COND_PUSH(1);}
 		  expr_value do
